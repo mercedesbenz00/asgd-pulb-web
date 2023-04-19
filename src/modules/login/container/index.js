@@ -24,7 +24,7 @@ const Login = ({
 
   useEffect(() => {
     if (!isHardReset && keycloak?.authenticated) {
-      userlogin(keycloak?.token);
+      userlogin({ token: keycloak?.token });
     } else {
       persistor.pause();
       persistor.flush().then(() => persistor.purge());

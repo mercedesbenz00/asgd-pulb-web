@@ -9,7 +9,7 @@ export const HardLoginReset = () => {
   return { type: actionTypes.HARD_LOGIN_RESET };
 };
 
-export const requestLogin = (token) => {
+export const requestLogin = ({ token = null, userRole = null }) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.REQUEST_LOGIN,
@@ -17,7 +17,7 @@ export const requestLogin = (token) => {
     });
 
     try {
-      const { data: response } = await loginAction();
+      const { data: response } = await loginAction({ userRole });
       const { status, data: result, message } = response;
       if (status) {
         dispatch({

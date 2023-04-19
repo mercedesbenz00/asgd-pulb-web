@@ -14,7 +14,7 @@ const LoginWithoutKeyCloak = ({
   resetError,
 }) => {
   const login = () => {
-    userlogin({ userRole: "SYSTEM_ADMIN" });
+    userlogin({ userRole: "ADMIN" });
   };
 
   if (validating) {
