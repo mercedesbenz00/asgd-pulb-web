@@ -1,0 +1,17 @@
+// Default variable overrides
+$primary: #1a395c;
+$secondary: #00854f;
+$body-bg: #edf1f5;
+$breadcrumb-font-size: "1.2rem";
+$breadcrumb-divider: quote(">");
+$pagination-disabled-color: "rgba(43, 43, 43, 0.4)";
+$pagination-disabled-bg: "dark grey";
+$accordion-bg: $body-bg;
+$accordion-button-active-bg: $body-bg;
+$accordion-border-color: $body-bg;
+$accordion-button-focus-border-color: $body-bg;
+$accordion-button-focus-box-shadow: $body-bg;
+// Require
+$table-bg: white;
+// @import "../../node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap";

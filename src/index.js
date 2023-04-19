@@ -1,24 +1,59 @@
 import React from "react";
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import App from "./App";
-import { store } from "./store/store";
-import PersistProvider from "./store/providers/persist-provider";
-import 'animate.css';
-import 'swiper/swiper-bundle.min.css';
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-import "./assets/scss/style.scss";
-import "./i18n";
+import ReactDOM from "react-dom/client";
+import App from "./containers/App";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
 
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import "./css/theme.scss";
+import "./css/global.css";
+import store, { persistor } from "store";
+import keycloak from "./keycloak";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AppContextProvider from "contexts/AppContext";
+import Loader from "components/Loader";
+import { BrowserRouter as Router } from "react-router-dom";
 
-const container = document.getElementById('root');
-const root = createRoot(container);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const eventLogger = (event, error) => {
+  console.log("onKeycloakEvent", event, error);
+};
+
+const tokenLogger = (tokens) => {
+  console.log("onKeycloakTokens", tokens);
+};
+
 root.render(
-    <Provider store={store}>
-      <PersistProvider>
-        <App />
-      </PersistProvider>
-    </Provider>
+  <Provider store={store}>
+    <PersistGate loading={<Loader />} persistor={persistor}>
+      <ReactKeycloakProvider
+        //initOptions={{ onLoad: "check-sso", checkLoginIframe: false }}
+        authClient={keycloak}
+        onEvent={eventLogger}
+        onTokens={tokenLogger}
+        LoadingComponent={<Loader />}
+        autoRefreshToken={true}
+      >
+        <AppContextProvider>
+          <Router>
+            <App />
+          </Router>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </AppContextProvider>
+      </ReactKeycloakProvider>
+    </PersistGate>
+  </Provider>
 );
-
