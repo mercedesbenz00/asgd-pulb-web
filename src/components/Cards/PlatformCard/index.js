@@ -12,6 +12,7 @@ export default function PaltformCard({
   setShowForm,
   setApplication,
   redirectUser,
+  isNonSSO = false,
 }) {
   const {
     name,
@@ -20,7 +21,6 @@ export default function PaltformCard({
     versionDate,
     accessRequests,
     haveAccess,
-    isNonSSO = false,
   } = platform;
 
   let disabled = true;
@@ -28,8 +28,8 @@ export default function PaltformCard({
   let status = undefined;
   let accessType = undefined;
   let accessTerm = undefined;
-  const accessGranted = haveAccess && accessRequests?.length < 1;
-  if (accessGranted) {
+
+  if (haveAccess || isNonSSO) {
     disabled = false;
     actionText = "Login";
   } else if (!!accessRequests && accessRequests?.length > 0) {
@@ -43,15 +43,15 @@ export default function PaltformCard({
   }
 
   const renderLockIcon = () => {
-    if (!accessGranted) {
+    if (!haveAccess && !isNonSSO) {
       if (status === ACCESS_REQUEST_STATUS.REJECTED || status === undefined) {
         return <LockIcon />;
       } else if (status === ACCESS_REQUEST_STATUS.PENDING) {
         return (
-          <div className='d-flex flex-column align-items-end'>
+          <div className="d-flex flex-column align-items-end">
             <UnlockPendingIcon />
             <div
-              className='mt-1'
+              className="mt-1"
               style={{ color: "#979391", fontSize: "smaller" }}
             >
               Pending Approval
@@ -63,10 +63,10 @@ export default function PaltformCard({
         accessType === ACCESS_TYPE_ENUM.TEMPORARY
       ) {
         return (
-          <div className='d-flex flex-column align-items-end'>
+          <div className="d-flex flex-column align-items-end">
             <UnlockIcon />
             <div
-              className='mt-1'
+              className="mt-1"
               style={{ color: "#979391", fontSize: "smaller" }}
             >
               {`Expiring in ${accessTerm} hours`}
@@ -77,37 +77,16 @@ export default function PaltformCard({
     }
   };
 
-  const renderAction = (actionText, disabled) => (
-    <button
-      type='button'
-      className='btn mx-1'
-      style={{ backgroundColor: color, color: "white" }}
-      disabled={actionText === "Login" && disabled}
-      onClick={() => {
-        if (actionText === "Login") {
-          if (!disabled) {
-            redirectUser(encodedUrl);
-          }
-        } else {
-          setShowForm(true);
-          setApplication(platform);
-        }
-      }}
-    >
-      {actionText}
-    </button>
-  );
-
   return (
     <div
-      className='custom-card d-flex flex-column m-2 p-3'
+      className="custom-card d-flex flex-column m-2 p-3"
       style={{ width: "290px", height: "240px" }}
     >
-      <div className='d-flex justify-content-between'>
+      <div className="d-flex justify-content-between">
         <Icon />
         {renderLockIcon()}
       </div>
-      <div className='d-flex flex-column mt-4'>
+      <div className="d-flex flex-column mt-4">
         <div
           className={classNames("fw-bold mb-1", {
             "opacity-50": disabled,
@@ -120,12 +99,38 @@ export default function PaltformCard({
           className={classNames("text-uppercase", { "opacity-50": disabled })}
         >{`Version ${versionName} | ${formatDateWithoutDay(versionDate)}`}</div>
       </div>
-      <div className='d-flex justify-content-center mt-auto'>
-        {isNonSSO &&
-          status !== ACCESS_REQUEST_STATUS.APPROVED &&
-          !disabled &&
-          renderAction("Request Access", false)}
-        {renderAction(actionText, disabled)}
+      <div className="d-flex justify-content-end mt-auto">
+        {isNonSSO && (
+          <button
+            type="button"
+            className="btn mx-2"
+            style={{ backgroundColor: color, color: "white" }}
+            onClick={() => {
+              setShowForm(true);
+              setApplication(platform);
+            }}
+          >
+            Request Access
+          </button>
+        )}
+        <button
+          type="button"
+          className="btn"
+          style={{ backgroundColor: color, color: "white" }}
+          disabled={actionText === "Login" && disabled}
+          onClick={() => {
+            if (actionText === "Login") {
+              if (!disabled) {
+                redirectUser(encodedUrl);
+              }
+            } else {
+              setShowForm(true);
+              setApplication(platform);
+            }
+          }}
+        >
+          {actionText}
+        </button>
       </div>
     </div>
   );

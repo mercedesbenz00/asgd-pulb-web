@@ -13,7 +13,7 @@ export default function UserInfo({ name }) {
           background: "#013686",
         }}
       >
-        <Label color="#F8FAFC" fontWeight="400">
+        <Label color="#F8FAFC" fontWeight="400" textAlign="center">
           {initialName}
         </Label>
       </div>

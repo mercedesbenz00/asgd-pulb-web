@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Modal({
   open = false,
   onClose = () => {},
@@ -18,14 +16,15 @@ export default function Modal({
           style={{ ...(!!customWidth && { maxWidth: customWidth }) }}
         >
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header bg-primary text-white">
               <div className="d-flex flex-column justify-content-center">
                 <h5 className="modal-title">{title}</h5>
+
                 {!!subTitle && <h6 className="fw-light">{subTitle}</h6>}
               </div>
               <button
                 type="button"
-                className="btn-close"
+                className="btn-close btn-close-white"
                 data-bs-dismiss="modal"
                 aria-label="Close"
                 onClick={() => {

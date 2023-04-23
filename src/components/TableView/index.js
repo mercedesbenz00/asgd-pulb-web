@@ -1,27 +1,45 @@
 import React from "react";
-import Pagination from "./Pagination";
+import { PaginationTop, PaginationBottom } from "./Pagination";
 import Table from "./Table";
-import TableHeader from "./TableHeader";
+import Filtering from "./Filtering";
 
 export default function TableView({
+  onAdd,
+  onFilter,
+  clearFilter,
+  text,
   tableData,
-  title,
   pages,
   page,
   noOfRecords,
-  headerActions,
   pageSize,
   paginationHandler,
+  setDownloadType,
 }) {
   return (
     <>
-      <TableHeader title={title} headerActions={headerActions} />
-      <Table tableData={tableData} />
-      {pages>0 && (
-        <Pagination
-          pages={pages}
+      <Filtering
+        onAdd={onAdd}
+        onFilter={onFilter}
+        clearFilter={clearFilter}
+        text={text}
+      />
+
+      {pages > 0 && (
+        <PaginationTop
           page={page}
           count={noOfRecords}
+          recordsPerPage={pageSize}
+          paginationHandler={paginationHandler}
+          setDownloadType={setDownloadType}
+        />
+      )}
+      <div className="mt-3" />
+      <Table tableData={tableData} />
+      {pages > 0 && (
+        <PaginationBottom
+          pages={pages}
+          page={page}
           recordsPerPage={pageSize}
           paginationHandler={paginationHandler}
         />

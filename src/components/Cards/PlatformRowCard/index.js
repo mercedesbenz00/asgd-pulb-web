@@ -28,7 +28,7 @@ export default function PaltformRowCard({
   let accessType = undefined;
   let accessTerm = undefined;
 
-  if (haveAccess) {
+  if (haveAccess || isNonSSO) {
     disabled = false;
     actionText = "Login";
   } else if (!!accessRequests && accessRequests?.length > 0) {
@@ -42,16 +42,16 @@ export default function PaltformRowCard({
   }
 
   const renderLockIcon = () => {
-    if (!haveAccess) {
+    if (!haveAccess && !isNonSSO) {
       if (status === ACCESS_REQUEST_STATUS.REJECTED || status === undefined) {
         return (
-          <div data-tip data-for='rejectedTip'>
+          <div data-tip data-for="rejectedTip">
             <LockIcon />
             <ReactTooltip
-              id='rejectedTip'
-              place='top'
-              type='error'
-              effect='solid'
+              id="rejectedTip"
+              place="top"
+              type="error"
+              effect="solid"
             >
               No Access
             </ReactTooltip>
@@ -59,13 +59,13 @@ export default function PaltformRowCard({
         );
       } else if (status === ACCESS_REQUEST_STATUS.PENDING) {
         return (
-          <div data-tip data-for='pendingTip'>
+          <div data-tip data-for="pendingTip">
             <UnlockPendingIcon />
             <ReactTooltip
-              id='pendingTip'
-              place='top'
-              type='warning'
-              effect='solid'
+              id="pendingTip"
+              place="top"
+              type="warning"
+              effect="solid"
             >
               Pending Approval
             </ReactTooltip>
@@ -76,13 +76,13 @@ export default function PaltformRowCard({
         accessType === ACCESS_TYPE_ENUM.TEMPORARY
       ) {
         return (
-          <div data-tip data-for='approvedTip'>
+          <div data-tip data-for="approvedTip">
             <UnlockIcon />
             <ReactTooltip
-              id='approvedTip'
-              place='top'
-              type='success'
-              effect='solid'
+              id="approvedTip"
+              place="top"
+              type="success"
+              effect="solid"
             >
               {`Expiring in ${accessTerm} hours`}
             </ReactTooltip>
@@ -93,12 +93,12 @@ export default function PaltformRowCard({
   };
 
   return (
-    <div className='custom-card my-2 p-3 d-flex flex-wrap w-100 align-items-center justify-content-between'>
-      <div className='d-flex align-items-center'>
+    <div className="custom-card my-2 p-3 d-flex flex-wrap w-100 align-items-center justify-content-between">
+      <div className="d-flex align-items-center">
         <div className={classNames("ms-2", { visible: disabled })}>
           {renderLockIcon()}
         </div>
-        <div className='d-flex align-items-center'>
+        <div className="d-flex align-items-center">
           <div
             className={classNames("fw-bold mx-3", {
               "opacity-50": disabled,
@@ -115,25 +115,41 @@ export default function PaltformRowCard({
         </div>
       </div>
 
-      <button
-        type='button'
-        className='btn'
-        style={{ backgroundColor: color, color: "white" }}
-        disabled={actionText === "Login" && disabled}
-        onClick={(e) => {
-          e.preventDefault();
-          if (actionText === "Login") {
-            if (!disabled) {
-              redirectUser(encodedUrl);
+      <div className="d-flex justify-content-end mt-auto">
+        {isNonSSO && (
+          <button
+            type="button"
+            className="btn mx-2"
+            style={{ backgroundColor: color, color: "white" }}
+            onClick={() => {
+              setShowForm(true);
+              setApplication(platform);
+            }}
+          >
+            Request Access
+          </button>
+        )}
+
+        <button
+          type="button"
+          className="btn"
+          style={{ backgroundColor: color, color: "white" }}
+          disabled={actionText === "Login" && disabled}
+          onClick={(e) => {
+            e.preventDefault();
+            if (actionText === "Login") {
+              if (!disabled) {
+                redirectUser(encodedUrl);
+              }
+            } else {
+              setShowForm(true);
+              setApplication(platform);
             }
-          } else {
-            setShowForm(true);
-            setApplication(platform);
-          }
-        }}
-      >
-        {actionText}
-      </button>
+          }}
+        >
+          {actionText}
+        </button>
+      </div>
     </div>
   );
 }

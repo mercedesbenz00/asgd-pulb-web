@@ -22,9 +22,11 @@ export default function Table({ tableData }) {
           scope="col"
           key={heading?.key}
           style={{ fontSize: "smaller", borderRadius: "0.5rem" }}
+          className="bg-primary text-white"
         >
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex align-items-center">
             {heading?.title}
+            <div className="mx-1" />
             {heading.sort && (
               <a
                 onClick={() => {
@@ -70,8 +72,14 @@ export default function Table({ tableData }) {
     );
   };
   return (
-    <div className="card my-3 shadow-sm table-responsive">
-      <table className="table ">
+    <div
+      className="table-responsive"
+      style={{
+        border: "1px 0 solid #013686",
+        borderRadius: "0.5rem",
+      }}
+    >
+      <table className="table table-striped table-borderless bg-primary">
         <thead>
           <tr>{renderHeaders()}</tr>
         </thead>

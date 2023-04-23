@@ -12,7 +12,7 @@ function Select({
   wrapperClass,
   error = false,
   helperText = "",
-  isRequired=false,
+  isRequired = false,
   ...props
 }) {
   const renderOptions = () => {
@@ -30,8 +30,11 @@ function Select({
   };
 
   return (
-    <div className={wrapperClass}>
-      <label htmlFor={id} className={`form-label fw-bold ${isRequired ? "required" : ""}`}>
+    <>
+      <label
+        htmlFor={id}
+        className={`form-label fw-bold ${isRequired ? "required" : ""}`}
+      >
         {label}
       </label>
       <select
@@ -40,12 +43,13 @@ function Select({
         onChange={onChange}
         value={value}
         {...props}
+        style={{ width: "auto !important" }}
       >
         {defaultOption && <option>{defaultOption}</option>}
         {renderOptions()}
       </select>
       <HelperText error={error} helperText={helperText} />
-    </div>
+    </>
   );
 }
 
