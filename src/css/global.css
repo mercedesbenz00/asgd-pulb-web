@@ -233,15 +233,9 @@ input[type="text"]:disabled {
   border-color: hsl(0, 0%, 90%);
 }
 
-.required:after {
-  content: " *";
+.required:before {
+  content: "* ";
   color: red;
-}
-
-.pagination-link {
-  border-radius: 0.3rem;
-  cursor: pointer;
-  padding: 0.3rem 0.8rem;
 }
 
 .react-datepicker__navigation {
@@ -321,4 +315,22 @@ input[type="text"]:disabled {
 
 .api-key-copied {
   color: green;
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #f1f5f9;
+}
+
+.disabled {
+  background-color: #f1f5f9;
+  opacity: 0.5;
+}
+
+.round {
+  border-radius: 0.3rem;
+}
+
+.form-select {
+  width: auto !important;
 }

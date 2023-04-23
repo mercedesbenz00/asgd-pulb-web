@@ -6,21 +6,24 @@ const useDataFetcher = (callback) => {
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
 
-  const fetch = async (data, config) => {
+  const fetch = async (formData, config) => {
     setIsLoading(true);
     try {
-      const { data: response } = await callback(data, config);
+      const { data: response } = await callback(formData, config);
 
       const { status, data: result, message } = response;
 
       if (status) {
         setData(result);
+        setError("");
         setIsError(false);
       } else {
+        setData({});
         setError(message);
         setIsError(true);
       }
     } catch (e) {
+      setData({});
       setError("Error");
       setIsError(true);
     } finally {

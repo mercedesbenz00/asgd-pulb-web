@@ -27,16 +27,17 @@ const tokenLogger = (tokens) => {
 };
 
 root.render(
-  <Provider store={store}>
-    <PersistGate loading={<Loader />} persistor={persistor}>
-      <ReactKeycloakProvider
-        //initOptions={{ onLoad: "check-sso", checkLoginIframe: false }}
-        authClient={keycloak}
-        onEvent={eventLogger}
-        onTokens={tokenLogger}
-        LoadingComponent={<Loader />}
-        autoRefreshToken={true}
-      >
+  <ReactKeycloakProvider
+    authClient={keycloak}
+    onEvent={eventLogger}
+    onTokens={tokenLogger}
+    LoadingComponent={
+      process.env.REACT_APP_BYPASS_KEYCLOAK === "true" ? null : <Loader />
+    }
+    autoRefreshToken={true}
+  >
+    <Provider store={store}>
+      <PersistGate loading={<Loader />} persistor={persistor}>
         <AppContextProvider>
           <Router>
             <App />
@@ -53,7 +54,7 @@ root.render(
             pauseOnHover
           />
         </AppContextProvider>
-      </ReactKeycloakProvider>
-    </PersistGate>
-  </Provider>
+      </PersistGate>
+    </Provider>
+  </ReactKeycloakProvider>
 );

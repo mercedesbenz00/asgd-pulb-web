@@ -3,19 +3,21 @@ import { requestLogin, resetLoginError } from "actions/authAction";
 import Loader from "components/Loader";
 import { HOME_ROUTE } from "modules/home";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ALERT_TYPE_ENUM } from "utilities/constants";
 import { useKeycloak } from "@react-keycloak/web";
 import { persistor } from "store";
 import Alert from "components/Alert";
-const Login = ({
-  userlogin,
-  isAuthenticated,
-  isHardReset,
-  validating,
-  error,
-  resetError,
-}) => {
+
+const Login = () => {
+  const { isAuthenticated, validating, isHardReset, error } = useSelector(
+    (state) => {
+      return state?.Auth;
+    }
+  );
+
+  const dispatch = useDispatch();
+
   const { keycloak } = useKeycloak();
 
   const login = useCallback(() => {
@@ -24,7 +26,7 @@ const Login = ({
 
   useEffect(() => {
     if (!isHardReset && keycloak?.authenticated) {
-      userlogin({ token: keycloak?.token });
+      dispatch(requestLogin({ token: keycloak?.token }));
     } else {
       persistor.pause();
       persistor.flush().then(() => persistor.purge());
@@ -57,24 +59,11 @@ const Login = ({
         <Alert
           type={ALERT_TYPE_ENUM.ERROR}
           message={error}
-          onClose={resetError}
+          onClose={() => dispatch(resetLoginError())}
         />
       )}
     </>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    userlogin: (data) => dispatch(requestLogin(data)),
-    resetError: () => dispatch(resetLoginError()),
-  };
-};
-
-const mapStateToProps = (state) => ({
-  isAuthenticated: state?.Auth?.isAuthenticated,
-  isHardReset: state?.Auth?.isHardReset,
-  validating: state?.Auth?.validating,
-  error: state?.Auth?.error,
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
