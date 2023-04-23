@@ -1,14 +1,14 @@
 import SvgIcon from "./SvgIcon";
 
-export default function SortIcon({
+export default function CaratRightIcon({
   width = "24",
   height = "24",
-  color = "#FFFFFF",
+  color = "#94A3B8",
 }) {
   return (
     <SvgIcon width={width} height={height}>
       <path
-        d="M18 21L14 17H17V7H14L18 3L22 7H19V17H22M2 19V17H12V19M2 13V11H9V13M2 7V5H6V7H2Z"
+        d="M7.83984 7.41L12.4198 12L7.83984 16.59L9.24984 18L15.2498 12L9.24984 6L7.83984 7.41Z"
         fill={color}
       />
     </SvgIcon>
