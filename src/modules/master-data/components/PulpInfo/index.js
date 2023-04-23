@@ -11,18 +11,18 @@ import TableView from "components/TableView";
 import EditIcon from "components/Icons/EditIcon";
 import TrashIcon from "components/Icons/TrashIcon";
 import ModalDelete from "components/ModalDelete";
-import CreateFeedingLine from "./CreateFeedingLine";
+import CreatePulpInfo from "./CreatePulpInfo";
 
 import {
-  requestFeedingLines,
-  requestFeedingLine,
-  saveFeedingLine,
-  deleteFeedingLineRequest,
-  resetFeedingLine,
-  getFeedingLines,
-} from "actions/feedingLineAction";
+  requestPulpInfos,
+  requestPulpInfo,
+  savePulpInfo,
+  deletePulpInfoRequest,
+  resetPulpInfo,
+  getPulpInfos,
+} from "actions/pulpInfoAction";
 
-const FeedingLine = () => {
+const PulpInfo = () => {
   const { labelTab } = useContext(AppContext);
 
   const [id, setId] = useState("");
@@ -45,7 +45,7 @@ const FeedingLine = () => {
   });
 
   const { data, loading, error, success, isDeleted, current } = useSelector(
-    (state) => state.FeedingLine
+    (state) => state.PulpInfo
   );
   const { list, page, pages, noOfRecords, pageSize } = data || {};
 
@@ -53,7 +53,7 @@ const FeedingLine = () => {
 
   useEffect(() => {
     dispatch(
-      requestFeedingLines({
+      requestPulpInfos({
         page: paginate?.page,
         pageSize: paginate?.pageSize,
         sortBy: paginate?.sortBy,
@@ -122,27 +122,41 @@ const FeedingLine = () => {
     return {
       headers: [
         {
-          title: "Paper Machine",
-          key: `machine:code`,
+          title: "Pulp Brand",
+          key: `pulpBrand:name`,
           sort: true,
-          renderer: ({ machine }) => machine?.code,
+          renderer: ({ pulpBrand }) => pulpBrand?.name,
         },
         {
-          title: "Feeding Line Code",
-          key: "code",
+          title: "Pulp Product",
+          key: `pulpProduct:name`,
           sort: true,
+          renderer: ({ pulpProduct }) => pulpProduct?.name,
         },
         {
-          title: "Feeding Line Name",
-          key: "name",
+          title: "Pulp Type",
+          key: `pulpType:code`,
           sort: true,
+          renderer: ({ pulpType }) => `${pulpType?.name}`,
         },
-
+        {
+          title: "Default Shape",
+          key: `pulpShape:name`,
+          sort: true,
+          renderer: ({ pulpShape }) => pulpShape?.name,
+        },
+        {
+          title: "Single Pack Weight",
+          key: "singlePackWeight",
+          sort: true,
+          renderer: ({ singlePackWeight }) => `${singlePackWeight} Kg`,
+        },
         {
           title: "Status",
           key: "deleted",
           sort: true,
-          renderer: ({ deleted }) => statusRenderer(deleted),
+          renderer: ({ deleted, untrained }) =>
+            statusRenderer(deleted, untrained),
         },
         {
           title: "Actions",
@@ -156,16 +170,22 @@ const FeedingLine = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
-  const statusRenderer = (deleted) => {
+  const statusRenderer = (deleted, untrained) => {
     const style = {
-      width: "6rem",
+      width: "10rem",
       borderRadius: "0.3rem",
-      border: `1px solid ${deleted ? "#FCA5A5" : "#6EE7B7"}`,
-      background: deleted ? "#FECACA" : "#A7F3D0",
-      color: deleted ? "#7F1D1D" : "#064E3B",
+      border: `1px solid ${
+        deleted ? "#FCA5A5" : untrained ? "#FCD34D" : "#6EE7B7"
+      }`,
+      background: deleted ? "#FECACA" : untrained ? "#FDE68A" : "#A7F3D0",
+      color: deleted ? "#7F1D1D" : untrained ? "#78350F" : "#064E3B",
     };
 
-    const text = deleted ? "NOT ACTIVE" : "ACTIVE";
+    const text = deleted
+      ? "NOT ACTIVE"
+      : untrained
+      ? "ACTIVE - UNTRAINED"
+      : "ACTIVE";
 
     return (
       <div className="badge p-1" style={{ ...style }}>
@@ -185,8 +205,8 @@ const FeedingLine = () => {
             setId(id);
             setMode("edit");
             setShowAddForm(true);
-            dispatch(resetFeedingLine());
-            dispatch(requestFeedingLine(id));
+            dispatch(resetPulpInfo());
+            dispatch(requestPulpInfo(id));
           }}
         >
           <EditIcon />
@@ -198,8 +218,8 @@ const FeedingLine = () => {
             setId(id);
             setMode("delete");
             setShowAddForm(false);
-            dispatch(resetFeedingLine());
-            dispatch(requestFeedingLine(id));
+            dispatch(resetPulpInfo());
+            dispatch(requestPulpInfo(id));
           }}
         >
           <TrashIcon color="black" />
@@ -212,26 +232,23 @@ const FeedingLine = () => {
     setId("");
     setMode("");
     setShowAddForm(false);
-    dispatch(resetFeedingLine());
+    dispatch(resetPulpInfo());
   };
 
   const onFormSubmitHandler = async (data) => {
-    const { machineId, code, name, password, deleted } = data;
+    const { id, deleted, ...rest } = data;
 
     const payload = {
-      machineId,
-      code,
-      name,
-      password,
+      ...rest,
       deleted: deleted === "true" ? true : false,
-      ...(mode === "edit" && { id: data?.id }),
+      ...(mode === "edit" && { id }),
     };
 
-    dispatch(saveFeedingLine(payload, data?.id));
+    dispatch(savePulpInfo(payload, id));
   };
 
   const onDeleteActionHandler = async (id) => {
-    dispatch(deleteFeedingLineRequest(id));
+    dispatch(deletePulpInfoRequest(id));
   };
 
   const resetAlert = () => {
@@ -256,28 +273,44 @@ const FeedingLine = () => {
     loading: loadingAll,
     data: dataAll,
     fetch: fetchAll,
-  } = useDataFetcher(getFeedingLines);
+  } = useDataFetcher(getPulpInfos);
 
   const [downloadType, setDownloadType] = useState(0);
 
   const downloadFile = (data, fileType) => {
-    const fileName = "feeding-lines";
+    const fileName = "pulp-infos";
 
     const headers = {
-      machine: "Paper Machine",
-      code: "Feeding Line Code",
-      name: "Feeding Line Name",
+      pulpBrand: "Pulp Brand",
+      pulpProduct: "Pulp Product",
+      pulpType: "Pulp Type",
+      pulpShape: "Default Shape",
+      singlePackWeight: "Single Pack Weight",
       deleted: "Status",
     };
 
     const rows =
       data?.map((item) => {
-        const { machine, code, name, deleted } = item;
+        const {
+          pulpBrand,
+          pulpProduct,
+          pulpType,
+          pulpShape,
+          singlePackWeight,
+          deleted,
+          untrained,
+        } = item;
         return {
-          machine: machine?.code,
-          code,
-          name,
-          deleted: deleted ? "NOT ACTIVE" : "ACTIVE",
+          pulpBrand: pulpBrand?.name,
+          pulpProduct: pulpProduct?.name,
+          pulpType: pulpType?.name,
+          pulpShape: pulpShape?.name,
+          singlePackWeight,
+          deleted: deleted
+            ? "NOT ACTIVE"
+            : untrained
+            ? "ACTIVE - UNTRAINED"
+            : "ACTIVE",
         };
       }) || [];
 
@@ -337,9 +370,9 @@ const FeedingLine = () => {
   }, [loadingAll, dataAll]);
 
   useEffect(() => {
-    if (labelTab === "Feeding Line") {
+    if (labelTab === "Pulp Information") {
       dispatch(
-        requestFeedingLines({
+        requestPulpInfos({
           page: paginate?.page,
           pageSize: paginate?.pageSize,
           sortBy: paginate?.sortBy,
@@ -356,7 +389,7 @@ const FeedingLine = () => {
         onAdd={onAdd}
         onFilter={onFilter}
         clearFilter={clearFilter}
-        text="feeding line"
+        text="pulp info"
         tableData={tableData}
         page={page}
         pages={pages}
@@ -377,8 +410,8 @@ const FeedingLine = () => {
       )}
 
       {!!showAddForm && (mode === "new" || (mode === "edit" && !!current)) && (
-        <CreateFeedingLine
-          title={generateTitle(mode, "Feeding Line")}
+        <CreatePulpInfo
+          title={generateTitle(mode, "Pulp Info")}
           open={showAddForm}
           onClose={onModalCloseHandler}
           onSubmit={(data) => onFormSubmitHandler(data)}
@@ -401,4 +434,4 @@ const FeedingLine = () => {
   );
 };
 
-export default FeedingLine;
+export default PulpInfo;

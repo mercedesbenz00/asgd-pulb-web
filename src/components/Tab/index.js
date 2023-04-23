@@ -9,16 +9,18 @@ const Tab = ({ data, disabled = false, isLoading = false }) => {
 
   return (
     <div style={!!disabled ? { pointerEvents: "none", opacity: "0.4" } : {}}>
-      <ul className="nav nav-tabs">
+      <ul className="nav nav-tabs" role="tablist">
         {data.map(({ label }, index) => (
-          <li className="nav-item me-2" key={index}>
-            <a
-              href={`#content${index}`}
+          <li className="nav-item me-2" key={index} role="presentation">
+            <button
               className={`nav-link ps-0  ${labelTab === label && "active"}`}
               style={{
                 backgroundColor: labelTab === label ? "#FFFFFF" : "#E6EBF3",
               }}
-              data-toggle="tab"
+              data-bs-toggle="tab"
+              data-bs-target={`#content${index}`}
+              type="button"
+              role="tab"
               onClick={() => setLabelTab(label)}
             >
               <div className="d-flex">
@@ -28,12 +30,12 @@ const Tab = ({ data, disabled = false, isLoading = false }) => {
                   {label}
                 </Label>
               </div>
-            </a>
+            </button>
           </li>
         ))}
       </ul>
       <div
-        className="border bg-white shadow-sm p-3"
+        className="tab-content border bg-white shadow-sm p-3"
         style={{ minHeight: "40rem" }}
       >
         <>
@@ -48,6 +50,7 @@ const Tab = ({ data, disabled = false, isLoading = false }) => {
                   }`}
                   id={`content${index}`}
                   key={label}
+                  role="tabpanel"
                 >
                   {component}
                 </div>

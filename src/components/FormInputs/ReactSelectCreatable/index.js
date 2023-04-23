@@ -28,6 +28,9 @@ const ReactSelectCreatable = ({
   helperText = "",
   isVisible = true,
   isRequired = false,
+  mode = "horizontal",
+  color = "#64748B",
+  fontWeight = "600",
   ...props
 }) => {
   const [field, meta, { setValue, setTouched }] = useField(props);
@@ -51,60 +54,70 @@ const ReactSelectCreatable = ({
 
   return (
     <div className={wrapperClass}>
-      <label
-        htmlFor={id}
-        className={`form-label fw-bold ${isRequired ? "required" : ""}`}
-      >
-        {label}
-      </label>
-      <CreatableSelect
-        value={!isMulti ? valueSingle : valueMulti}
-        onChange={!isMulti ? onChangeSingle : onChangeMulti}
-        onBlur={setTouched}
-        options={options}
-        isLoading={isLoading}
-        isDisabled={isDisabled}
-        isValid={isValid}
-        isSearchable={isSearchable}
-        isClearable={isClearable}
-        isMulti={isMulti}
-        placeholder={placeholder}
-        className="mySelect"
-        classNamePrefix="mySelect"
-        myBorderRadius={borderRadius}
-        styles={{
-          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-          multiValue: (base) => ({ ...base, width: widthMultiValue }),
-        }}
-        menuPortalTarget={document.body}
-        myWidth={width}
-        isOptionDisabled={(option) =>
-          !!isOptionDisabled && !!maxLimit && maxLimit !== undefined
-            ? value.length >= maxLimit
-            : false
-        }
-        components={{
-          IndicatorSeparator: () => null,
-          DropdownIndicator: (props) => {
-            return (
-              <components.DropdownIndicator {...props}>
-                <ArrowDownIcon width="20" height="20" />
-              </components.DropdownIndicator>
-            );
-          },
-          ClearIndicator: () => {
-            return (
-              <div
-                className="react-datepicker__close-icon"
-                onClick={() => setValue(null)}
-              ></div>
-            );
-          },
-        }}
-      />
-      {meta.touched && meta.error ? (
-        <HelperText error={meta.error} helperText={helperText} />
-      ) : null}
+      <div className="row">
+        <div className={`${mode === "vertical" ? "col-12" : "col-4"}`}>
+          <label
+            htmlFor={id}
+            className={`form-label ${isRequired ? "required" : ""}`}
+            style={{
+              color,
+              fontWeight,
+            }}
+          >
+            {label}
+          </label>
+        </div>
+        <div className={`${mode === "vertical" ? "col-12" : "col-8"}`}>
+          <CreatableSelect
+            value={!isMulti ? valueSingle : valueMulti}
+            onChange={!isMulti ? onChangeSingle : onChangeMulti}
+            onBlur={setTouched}
+            options={options}
+            isLoading={isLoading}
+            isDisabled={isDisabled}
+            isValid={isValid}
+            isSearchable={isSearchable}
+            isClearable={isClearable}
+            isMulti={isMulti}
+            placeholder={placeholder}
+            className="mySelect"
+            classNamePrefix="mySelect"
+            myBorderRadius={borderRadius}
+            styles={{
+              menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+              multiValue: (base) => ({ ...base, width: widthMultiValue }),
+            }}
+            menuPortalTarget={document.body}
+            myWidth={width}
+            isOptionDisabled={(option) =>
+              !!isOptionDisabled && !!maxLimit && maxLimit !== undefined
+                ? value.length >= maxLimit
+                : false
+            }
+            components={{
+              IndicatorSeparator: () => null,
+              DropdownIndicator: (props) => {
+                return (
+                  <components.DropdownIndicator {...props}>
+                    <ArrowDownIcon width="20" height="20" />
+                  </components.DropdownIndicator>
+                );
+              },
+              ClearIndicator: () => {
+                return (
+                  <div
+                    className="react-datepicker__close-icon"
+                    onClick={() => setValue(null)}
+                  ></div>
+                );
+              },
+            }}
+          />
+          {meta.touched && meta.error ? (
+            <HelperText error={meta.error} helperText={helperText} />
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 };

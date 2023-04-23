@@ -11,10 +11,12 @@ import { composeWithDevTools } from "@redux-devtools/extension";
 
 import authReducer from "reducers/authReducers";
 import feedingLineReducer from "reducers/feedingLineReducer";
+import pulpInfoReducer from "reducers/pulpInfoReducer";
 
 const rootReducer = combineReducers({
   Auth: authReducer,
   FeedingLine: feedingLineReducer,
+  PulpInfo: pulpInfoReducer,
 });
 
 const persistConfig = {

@@ -22,6 +22,7 @@ function RadioGroup({
   const renderOptions = () => {
     return options?.map((option, index) => {
       const elemIndex = id + index;
+      const optVal = String(option?.value);
       return (
         <Fragment key={elemIndex}>
           <input
@@ -30,11 +31,14 @@ function RadioGroup({
             name={name}
             id={elemIndex}
             autoComplete="off"
-            value={String(option?.value)}
+            value={optVal}
             onChange={onChange}
-            checked={value === String(option?.value)}
+            checked={value === optVal}
           />
-          <label className="btn btn-outline-primary" htmlFor={elemIndex}>
+          <label
+            className="btn btn-outline-primary border-secondary"
+            htmlFor={elemIndex}
+          >
             {option?.label}
           </label>
         </Fragment>

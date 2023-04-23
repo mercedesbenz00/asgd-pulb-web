@@ -21,10 +21,10 @@ export default function Table({ tableData }) {
         <th
           scope="col"
           key={heading?.key}
-          style={{ fontSize: "smaller", borderRadius: "0.5rem" }}
-          className="bg-primary text-white"
+          style={{ borderRadius: "0.5rem" }}
+          className="bg-primary text-white text-center"
         >
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center justify-content-center">
             {heading?.title}
             <div className="mx-1" />
             {heading.sort && (
@@ -56,7 +56,7 @@ export default function Table({ tableData }) {
   const renderBody = () => {
     return data.map((row, i) => {
       return (
-        <tr key={i} style={{ fontSize: "smaller", verticalAlign: "middle" }}>
+        <tr key={i} style={{ verticalAlign: "middle", textAlign: "center" }}>
           {renderRow(row)}
         </tr>
       );
