@@ -31,7 +31,7 @@ export default function CreateFeedingLine({
     if (!!machines && machines?.length > 0) {
       return machines.map((i) => {
         return {
-          value: i?.id,
+          value: i?.code,
           label: i.code,
         };
       });
@@ -46,7 +46,7 @@ export default function CreateFeedingLine({
     if (data !== null) {
       return {
         id: data?.id,
-        machineId: data?.machineId,
+        machine_code: data?.machine_code,
         name: data?.name,
         code: data?.code,
         deleted: String(data?.deleted),
@@ -57,7 +57,7 @@ export default function CreateFeedingLine({
 
     return {
       id: "",
-      machineId: "",
+      machine_code: "",
       name: "",
       code: "",
       deleted: "",
@@ -108,8 +108,8 @@ export default function CreateFeedingLine({
         </div>
 
         <ReactSelect
-          id="machineId"
-          name="machineId"
+          id="machine_code"
+          name="machine_code"
           label="Paper Machine"
           placeholder="Please select paper machine"
           options={machineOptions}

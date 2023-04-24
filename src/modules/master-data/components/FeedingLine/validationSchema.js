@@ -13,7 +13,7 @@ yup.addMethod(yup.string, "passwordInvalid", function (errorMessage) {
 
 export const feedingLineValidationSchema = yup.object().shape({
   id: yup.string(),
-  machineId: yup.string().required("Machine ID is required"),
+  machine_code: yup.string().required("Machine ID is required"),
   code: yup
     .string()
     .matches(/^[a-zA-Z0-9)(&,\-._# ]*$/, {

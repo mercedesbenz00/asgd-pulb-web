@@ -216,10 +216,10 @@ const FeedingLine = () => {
   };
 
   const onFormSubmitHandler = async (data) => {
-    const { machineId, code, name, password, deleted } = data;
+    const { machine_code, code, name, password, deleted } = data;
 
     const payload = {
-      machineId,
+      machine_code,
       code,
       name,
       password,
