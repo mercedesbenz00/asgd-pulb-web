@@ -17,7 +17,7 @@ export default function ModalDelete({
             Are you sure to delete{" "}
             <strong>
               <u>
-                {name}[{code}]
+                {name} {!!code && `[${code}]`}
               </u>
             </strong>{" "}
             from the list? This might change the data that is associate with it

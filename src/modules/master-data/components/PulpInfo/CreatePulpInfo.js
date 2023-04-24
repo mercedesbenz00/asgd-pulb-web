@@ -46,8 +46,8 @@ export default function CreatePulpInfo({
     if (!!brands && brands?.length > 0) {
       return brands.map((i) => {
         return {
-          value: i?.id,
-          label: i.name,
+          value: i?.code,
+          label: i.code,
         };
       });
     } else {
@@ -61,8 +61,8 @@ export default function CreatePulpInfo({
     if (!!products && products?.length > 0) {
       return products.map((i) => {
         return {
-          value: i?.id,
-          label: i.name,
+          value: i?.code,
+          label: i.code,
         };
       });
     } else {
@@ -76,7 +76,7 @@ export default function CreatePulpInfo({
     if (!!types && types?.length > 0) {
       return types.map((i) => {
         return {
-          value: i?.id,
+          value: i?.code,
           label: i.name,
         };
       });
@@ -91,8 +91,8 @@ export default function CreatePulpInfo({
     if (!!shapes && shapes?.length > 0) {
       return shapes.map((i) => {
         return {
-          value: i?.id,
-          label: i.name,
+          value: i?.code,
+          label: i.code,
         };
       });
     } else {
@@ -106,25 +106,25 @@ export default function CreatePulpInfo({
     if (data !== null) {
       return {
         id: data?.id,
-        pulpBrandId: data?.pulpBrandId,
-        pulpProductId: data?.pulpProductId,
-        pulpTypeId: data?.pulpTypeId,
-        pulpShapeId: String(data?.pulpShapeId),
-        singlePackWeight: data?.singlePackWeight,
+        brand_code: data?.brand_code,
+        product_code: data?.product_code,
+        type_code: data?.type_code,
+        pack_num: String(data?.pack_num),
+        unit_weight: data?.unit_weight,
         deleted: String(data?.deleted),
-        untrained: data?.untrained,
+        trained: !data?.trained,
       };
     }
 
     return {
       id: "",
-      pulpBrandId: "",
-      pulpProductId: "",
-      pulpTypeId: "",
-      pulpShapeId: "",
-      singlePackWeight: "",
+      brand_code: "",
+      product_code: "",
+      type_code: "",
+      pack_num: "",
+      unit_weight: "",
       deleted: "",
-      untrained: false,
+      trained: false,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -173,8 +173,8 @@ export default function CreatePulpInfo({
         </div>
 
         <ReactSelectCreatable
-          id="pulpBrandId"
-          name="pulpBrandId"
+          id="brand_code"
+          name="brand_code"
           label="Pulp Brand"
           placeholder="Please select pulp brand"
           options={brandOptions}
@@ -186,8 +186,8 @@ export default function CreatePulpInfo({
         />
 
         <ReactSelectCreatable
-          id="pulpProductId"
-          name="pulpProductId"
+          id="product_code"
+          name="product_code"
           label="Pulp Product"
           placeholder="Please select pulp product"
           options={productOptions}
@@ -199,8 +199,8 @@ export default function CreatePulpInfo({
         />
 
         <ReactSelect
-          id="pulpTypeId"
-          name="pulpTypeId"
+          id="type_code"
+          name="type_code"
           label="Pulp Type"
           placeholder="Please select pulp type"
           options={typeOptions}
@@ -212,8 +212,8 @@ export default function CreatePulpInfo({
 
         <RadioGroup
           label="Default Shape"
-          id="pulpShapeId"
-          name="pulpShapeId"
+          id="pack_num"
+          name="pack_num"
           wrapperClass={"my-3"}
           options={shapeOptions}
           withValidation={true}
@@ -224,8 +224,8 @@ export default function CreatePulpInfo({
           label="Single Pack Weight"
           placeholder="Please enter estimate weight in kg"
           type="text"
-          id="singlePackWeight"
-          name="singlePackWeight"
+          id="unit_weight"
+          name="unit_weight"
           withValidation={true}
           wrapperClass={"my-3"}
           isRequired={true}
@@ -244,12 +244,12 @@ export default function CreatePulpInfo({
         <div className="form-group form-check my-3">
           <Field
             type="checkbox"
-            name="untrained"
-            id="untrained"
+            name="trained"
+            id="trained"
             className="form-check-input"
           />
           <label
-            htmlFor="untrained"
+            htmlFor="trained"
             className="form-check-label"
             style={{
               color: "#64748B",

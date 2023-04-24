@@ -3,11 +3,11 @@ import * as yup from "yup";
 
 export const feedingLineValidationSchema = yup.object().shape({
   id: yup.string(),
-  pulpBrandId: yup.string().required("Pulp Brand is required"),
-  pulpProductId: yup.string().required("Pulp Product is required"),
-  pulpTypeId: yup.string().required("Pulp Type is required"),
-  pulpShapeId: yup.string().required("Default Shape is required"),
-  singlePackWeight: yup
+  brand_code: yup.string().required("Pulp Brand is required"),
+  product_code: yup.string().required("Pulp Product is required"),
+  type_code: yup.string().required("Pulp Type is required"),
+  pack_num: yup.string().required("Default Shape is required"),
+  unit_weight: yup
     .string()
     .matches(/^[0-9.]*$/, { message: "Only number and dot allowed" })
     .trim()

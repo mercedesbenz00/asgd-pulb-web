@@ -123,15 +123,15 @@ const PulpInfo = () => {
       headers: [
         {
           title: "Pulp Brand",
-          key: `pulpBrand:name`,
+          key: `brand:code`,
           sort: true,
-          renderer: ({ pulpBrand }) => pulpBrand?.name,
+          renderer: ({ brand }) => brand?.code,
         },
         {
           title: "Pulp Product",
-          key: `pulpProduct:name`,
+          key: `product:code`,
           sort: true,
-          renderer: ({ pulpProduct }) => pulpProduct?.name,
+          renderer: ({ product }) => product?.code,
         },
         {
           title: "Pulp Type",
@@ -141,22 +141,21 @@ const PulpInfo = () => {
         },
         {
           title: "Default Shape",
-          key: `pulpShape:name`,
+          key: `pulpShape:code`,
           sort: true,
-          renderer: ({ pulpShape }) => pulpShape?.name,
+          renderer: ({ pulpShape }) => pulpShape?.code,
         },
         {
           title: "Single Pack Weight",
-          key: "singlePackWeight",
+          key: "unit_weight",
           sort: true,
-          renderer: ({ singlePackWeight }) => `${singlePackWeight} Kg`,
+          renderer: ({ unit_weight }) => `${unit_weight} Kg`,
         },
         {
           title: "Status",
           key: "deleted",
           sort: true,
-          renderer: ({ deleted, untrained }) =>
-            statusRenderer(deleted, untrained),
+          renderer: ({ deleted, trained }) => statusRenderer(deleted, trained),
         },
         {
           title: "Actions",
@@ -170,20 +169,20 @@ const PulpInfo = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
-  const statusRenderer = (deleted, untrained) => {
+  const statusRenderer = (deleted, trained) => {
     const style = {
       width: "10rem",
       borderRadius: "0.3rem",
       border: `1px solid ${
-        deleted ? "#FCA5A5" : untrained ? "#FCD34D" : "#6EE7B7"
+        deleted ? "#FCA5A5" : !trained ? "#FCD34D" : "#6EE7B7"
       }`,
-      background: deleted ? "#FECACA" : untrained ? "#FDE68A" : "#A7F3D0",
-      color: deleted ? "#7F1D1D" : untrained ? "#78350F" : "#064E3B",
+      background: deleted ? "#FECACA" : !trained ? "#FDE68A" : "#A7F3D0",
+      color: deleted ? "#7F1D1D" : !trained ? "#78350F" : "#064E3B",
     };
 
     const text = deleted
       ? "NOT ACTIVE"
-      : untrained
+      : !trained
       ? "ACTIVE - UNTRAINED"
       : "ACTIVE";
 
@@ -236,11 +235,12 @@ const PulpInfo = () => {
   };
 
   const onFormSubmitHandler = async (data) => {
-    const { id, deleted, ...rest } = data;
+    const { id, deleted, trained, ...rest } = data;
 
     const payload = {
       ...rest,
       deleted: deleted === "true" ? true : false,
+      trained: !trained,
       ...(mode === "edit" && { id }),
     };
 
@@ -281,31 +281,31 @@ const PulpInfo = () => {
     const fileName = "pulp-infos";
 
     const headers = {
-      pulpBrand: "Pulp Brand",
-      pulpProduct: "Pulp Product",
+      brand: "Pulp Brand",
+      product: "Pulp Product",
       pulpType: "Pulp Type",
       pulpShape: "Default Shape",
-      singlePackWeight: "Single Pack Weight",
+      unit_weight: "Single Pack Weight",
       deleted: "Status",
     };
 
     const rows =
       data?.map((item) => {
         const {
-          pulpBrand,
-          pulpProduct,
+          brand,
+          product,
           pulpType,
           pulpShape,
-          singlePackWeight,
+          unit_weight,
           deleted,
           untrained,
         } = item;
         return {
-          pulpBrand: pulpBrand?.name,
-          pulpProduct: pulpProduct?.name,
+          brand: brand?.code,
+          product: product?.code,
           pulpType: pulpType?.name,
-          pulpShape: pulpShape?.name,
-          singlePackWeight,
+          pulpShape: pulpShape?.code,
+          unit_weight: `${unit_weight} Kg`,
           deleted: deleted
             ? "NOT ACTIVE"
             : untrained
@@ -426,8 +426,7 @@ const PulpInfo = () => {
           onClose={onModalCloseHandler}
           onSubmit={(id) => onDeleteActionHandler(id)}
           id={id}
-          name={current?.name}
-          code={current?.code}
+          name={`${current?.brand?.code} - ${current?.product?.code} - ${current?.pulpType?.code}`}
         />
       )}
     </>
