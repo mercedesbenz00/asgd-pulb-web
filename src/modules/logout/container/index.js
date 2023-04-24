@@ -1,5 +1,6 @@
-import React from "react";
 import { useHistory } from "react-router-dom";
+import { HOME_ROUTE } from "modules/home";
+
 const Logout = () => {
   let history = useHistory();
 
@@ -12,7 +13,7 @@ const Logout = () => {
         <div className="my-3" />
         <button
           onClick={() => {
-            history.push("/login");
+            history.push(HOME_ROUTE);
           }}
           className="btn btn-primary"
         >

@@ -6,6 +6,7 @@ import HelperText from "../HelperText";
 import Image from "../../Image";
 import { imgSrcPath } from "utilities/common";
 import withInputFormValidation from "hoc/withInputFormValidation";
+import Loader from "components/Loader";
 
 function UploadFile({
   label,
@@ -23,12 +24,15 @@ function UploadFile({
   accept = "image/*",
   width = "10rem",
   height = "8rem",
+  isUploading = false,
   ...props
 }) {
   const fileRef = React.useRef();
 
   return (
     <div className={wrapperClass}>
+      {isUploading && <Loader />}
+
       <label
         htmlFor={id}
         className={`form-label fw-bold ${isRequired ? "required" : ""}`}

@@ -1,13 +1,16 @@
 import SvgIcon from "./SvgIcon";
 
 export default function DownloadIcon({
-  width = "14",
+  width = "16",
   height = "17",
-  color = "black",
+  color = "#013686",
 }) {
   return (
     <SvgIcon width={width} height={height}>
-   <path xmlns="http://www.w3.org/2000/svg" d="M14 6H10V0H4V6H0L7 13L14 6ZM6 8V2H8V8H9.17L7 10.17L4.83 8H6ZM0 15H14V17H0V15Z" fill="#1A395C"/>
+      <path
+        d="M12.9 7.19268C12.4467 4.89268 10.4267 3.16602 8 3.16602C6.07333 3.16602 4.4 4.25935 3.56667 5.85935C1.56 6.07268 0 7.77268 0 9.83268C0 12.0393 1.79333 13.8327 4 13.8327H12.6667C14.5067 13.8327 16 12.3393 16 10.4993C16 8.73935 14.6333 7.31268 12.9 7.19268ZM11.3333 9.16602L8.23333 12.266C8.1 12.3993 7.89333 12.3993 7.76 12.266L4.66667 9.16602H6.66667V6.49935H9.33333V9.16602H11.3333Z"
+        fill={color}
+      />
     </SvgIcon>
   );
 }

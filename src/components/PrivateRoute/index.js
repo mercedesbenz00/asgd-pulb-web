@@ -1,9 +1,8 @@
-import React from "react";
+import { useKeycloak } from "@react-keycloak/web";
 import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { AppLayout } from "../../containers/AppLayout";
-import { LOGIN_ROUTE } from "../../modules/login";
-import { useKeycloak } from "@react-keycloak/web";
+import { LOGIN_ROUTE } from "modules/login";
 
 const PrivateRoute = ({ component: Component, useLayout, ...rest }) => {
   const { keycloak } = useKeycloak();

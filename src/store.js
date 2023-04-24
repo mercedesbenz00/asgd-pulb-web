@@ -5,13 +5,18 @@ import {
   compose,
 } from "redux";
 import thunk from "redux-thunk";
-import authReducer from "reducers/authReducers";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { composeWithDevTools } from "@redux-devtools/extension";
 
+import authReducer from "reducers/authReducers";
+import feedingLineReducer from "reducers/feedingLineReducer";
+import pulpInfoReducer from "reducers/pulpInfoReducer";
+
 const rootReducer = combineReducers({
   Auth: authReducer,
+  FeedingLine: feedingLineReducer,
+  PulpInfo: pulpInfoReducer,
 });
 
 const persistConfig = {

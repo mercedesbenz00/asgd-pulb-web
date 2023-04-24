@@ -21,10 +21,12 @@ export default function Table({ tableData }) {
         <th
           scope="col"
           key={heading?.key}
-          style={{ fontSize: "smaller", borderRadius: "0.5rem" }}
+          style={{ borderRadius: "0.5rem" }}
+          className="bg-primary text-white text-center"
         >
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex align-items-center justify-content-center">
             {heading?.title}
+            <div className="mx-1" />
             {heading.sort && (
               <a
                 onClick={() => {
@@ -54,7 +56,7 @@ export default function Table({ tableData }) {
   const renderBody = () => {
     return data.map((row, i) => {
       return (
-        <tr key={i} style={{ fontSize: "smaller", verticalAlign: "middle" }}>
+        <tr key={i} style={{ verticalAlign: "middle", textAlign: "center" }}>
           {renderRow(row)}
         </tr>
       );
@@ -70,8 +72,14 @@ export default function Table({ tableData }) {
     );
   };
   return (
-    <div className="card my-3 shadow-sm table-responsive">
-      <table className="table ">
+    <div
+      className="table-responsive"
+      style={{
+        border: "1px 0 solid #013686",
+        borderRadius: "0.5rem",
+      }}
+    >
+      <table className="table table-striped table-borderless bg-primary">
         <thead>
           <tr>{renderHeaders()}</tr>
         </thead>

@@ -1,5 +1,6 @@
 .divider {
-    border-left: 2px solid #0072BC;
-    height: 50%;
-    margin: 0 25px;
-  }
+  border: 1px solid #013686;
+  transform: rotate(90deg);
+  width: 22px;
+  height: 0px;
+}

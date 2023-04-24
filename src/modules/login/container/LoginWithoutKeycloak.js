@@ -1,20 +1,20 @@
-import { requestLogin } from "actions/authAction";
-import Loader from "components/Loader";
-import { HOME_ROUTE } from "modules/home";
+import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { requestLogin, resetLoginError } from "actions/authAction";
+import { HOME_ROUTE } from "modules/home";
 import { ALERT_TYPE_ENUM } from "utilities/constants";
 import Alert from "components/Alert";
+import Loader from "components/Loader";
 
-const LoginWithoutKeyCloak = ({
-  userlogin,
-  isAuthenticated,
-  validating,
-  error,
-  resetError,
-}) => {
+const LoginWithoutKeyCloak = () => {
+  const { isAuthenticated, validating, error } = useSelector((state) => {
+    return state?.Auth;
+  });
+
+  const dispatch = useDispatch();
+
   const login = () => {
-    userlogin({ userRole: "ADMIN" });
+    dispatch(requestLogin({ userRole: process.env.REACT_APP_LOGIN_AS }));
   };
 
   if (validating) {
@@ -43,25 +43,11 @@ const LoginWithoutKeyCloak = ({
         <Alert
           type={ALERT_TYPE_ENUM.ERROR}
           message={error}
-          onClose={resetError}
+          onClose={() => dispatch(resetLoginError())}
         />
       )}
     </>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    userlogin: (data) => dispatch(requestLogin(data)),
-  };
-};
-
-const mapStateToProps = (state) => ({
-  isAuthenticated: state?.Auth?.isAuthenticated,
-  validating: state?.Auth?.validating,
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginWithoutKeyCloak);
+export default LoginWithoutKeyCloak;

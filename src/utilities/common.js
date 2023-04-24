@@ -24,7 +24,7 @@ export const addHoursToDate = (objDate, intHours) => {
 };
 
 export const formatDate = (date, withoutTime = false) => {
-  return format(new Date(date), `MM/dd/yyyy ${!withoutTime ? "HH:MM aa" : ""}`);
+  return format(new Date(date), `MM/dd/yyyy ${!withoutTime ? "hh:mm aa" : ""}`);
 };
 
 export const formatDateWithoutDay = (value) => {
